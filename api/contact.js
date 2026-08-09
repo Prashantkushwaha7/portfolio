@@ -104,12 +104,35 @@ function createHtmlTemplate({ name, email, subject, message, timestamp }) {
 // ---------------------------------------------------------------------------
 // Nodemailer transporter (created per invocation — no module-level singleton)
 // Vercel injects environment variables automatically; dotenv is NOT needed.
+//
+// IMPORTANT: Never add a fallback/default value for SMTP_HOST.
+// If SMTP_HOST is undefined, Nodemailer silently defaults to 127.0.0.1:587
+// which causes ECONNREFUSED on Vercel. The guard below prevents this.
 // ---------------------------------------------------------------------------
 function createTransporter() {
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = Number(process.env.SMTP_PORT);
+  const smtpSecure = process.env.SMTP_SECURE === 'true';
+
+  // Guard: fail immediately if required SMTP env vars are missing.
+  // Do NOT provide fallback values — that would silently use localhost.
+  if (!smtpHost || !process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
+    console.error(
+      '❌ SMTP configuration is incomplete. ' +
+      'Ensure SMTP_HOST, SMTP_USER, SMTP_PASSWORD, SMTP_PORT, and SMTP_SECURE ' +
+      'are set as Environment Variables in the Vercel dashboard. ' +
+      `Current SMTP_HOST="${smtpHost}" SMTP_USER="${process.env.SMTP_USER ? '[SET]' : '[MISSING]'}" ` +
+      `SMTP_PASSWORD="${process.env.SMTP_PASSWORD ? '[SET]' : '[MISSING]'}"`
+    );
+    throw new Error('SMTP environment variables are not configured.');
+  }
+
+  console.log(`SMTP transporter config: host=${smtpHost} port=${smtpPort} secure=${smtpSecure}`);
+
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === 'true',
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASSWORD,
