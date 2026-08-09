@@ -61,16 +61,13 @@ app.use(
   })
 );
 
-// Explicit route handler for PDF requests
-app.get('/*.pdf', (req, res, next) => {
-  const fileName = path.basename(req.path);
-  const filePath = path.join(publicDir, fileName);
+// Exact route for the resume PDF (Express 5: no wildcard /*.pdf allowed)
+app.get('/prashant_resume.pdf', (req, res) => {
+  const filePath = path.join(publicDir, 'prashant_resume.pdf');
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', 'inline; filename="prashant_resume.pdf"');
   res.setHeader('Cache-Control', 'public, max-age=3600');
-  res.sendFile(filePath, (err) => {
-    if (err) next();
-  });
+  res.sendFile(filePath);
 });
 
 // Mount API routes
@@ -81,7 +78,8 @@ const distDir = path.join(__dirname, '../dist');
 if (fs.existsSync(distDir)) {
   app.use(express.static(distDir));
   // SPA fallback: serve index.html for all non-API routes (enables /resume, etc.)
-  app.get('*', (req, res) => {
+  // Express 5 catch-all syntax: /{*path}
+  app.get('/{*path}', (req, res) => {
     res.sendFile(path.join(distDir, 'index.html'));
   });
 } else {
