@@ -156,7 +156,7 @@ const Hero = () => {
           </motion.p>
 
           {/* Main Name Typography — Character-by-Character Staggered Reveal (170ms per letter) */}
-          <h1 className="hero-main-title">
+          <h1 className="hero-main-title" aria-label="Prashant Chandra Kushwaha">
             <div className="name-line-1">
               {word1.map((char, i) => (
                 <motion.span

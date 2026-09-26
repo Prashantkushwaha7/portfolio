@@ -1,0 +1,6 @@
+# robots.txt for Prashant Chandra Kushwaha Portfolio
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://prashantkushwaha.vercel.app/sitemap.xml
