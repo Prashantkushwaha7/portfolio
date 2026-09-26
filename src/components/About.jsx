@@ -134,16 +134,13 @@ const About = () => {
             <motion.p className="about-paragraph" variants={itemVariants}>
               I'm Prashant Chandra Kushwaha, a Computer Science student and{' '}
               <span className="text-highlight">Full Stack Developer</span> passionate about{' '}
-              <span className="text-highlight">Java</span> and{' '}
-              <span className="text-highlight">Artificial Intelligence</span>. I enjoy turning ideas
-              into practical software—from backend systems and APIs to intelligent AI-powered applications.
+              <span className="text-highlight">Java</span>, <span className="text-highlight">Spring Boot</span>,{' '}
+              <span className="text-highlight">React</span>, <span className="text-highlight">Node.js</span>, and{' '}
+              <span className="text-highlight">Artificial Intelligence</span>. I enjoy turning ideas into practical software—from backend systems and APIs to high-performance <span className="text-highlight">Web Development</span> and intelligent AI-powered solutions.
             </motion.p>
 
             <motion.p className="about-paragraph" variants={itemVariants}>
-              I also explore full-stack development and have gained hands-on experience building IoT projects
-              with <span className="text-highlight">ESP32 and Wi-Fi CSI sensing</span>. I’m driven by{' '}
-              <span className="text-highlight">problem solving</span>, continuous learning, and building
-              technology that goes beyond just code.
+              I also specialize in full-stack architecture and have hands-on experience building <span className="text-highlight">IoT</span> projects with <span className="text-highlight">ESP32 and Wi-Fi CSI sensing</span>. I’m driven by <span className="text-highlight">problem solving</span>, continuous learning, and building robust engineering systems that go beyond just code.
             </motion.p>
           </motion.div>
 
