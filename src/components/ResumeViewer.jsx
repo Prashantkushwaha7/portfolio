@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ZoomIn, ZoomOut, RotateCcw, Loader2 } from 'lucide-react';
+import { ArrowLeft, ZoomIn, ZoomOut, RotateCcw, Download, Loader2 } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
@@ -160,6 +160,14 @@ const ResumeViewer = () => {
             <button onClick={resetZoom} className="control-btn" title="Reset Zoom">
               <RotateCcw size={14} />
             </button>
+            <a
+              href="/prashantchandra_resume.pdf"
+              download="Prashant_Chandra_Kushwaha_CV.pdf"
+              className="control-btn"
+              title="Download CV"
+            >
+              <Download size={15} />
+            </a>
           </div>
         </div>
       </header>

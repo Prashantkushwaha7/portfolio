@@ -9,7 +9,13 @@ const pdfResumeDataPlugin = () => ({
   configureServer(server) {
     server.middlewares.use((req, res, next) => {
       if (req.url && req.url.startsWith('/api/resume-data')) {
-        const filePath = fileURLToPath(new URL('./public/prashant_resume.pdf', import.meta.url));
+        let filePath = fileURLToPath(new URL('./public/Prashant chandra kushwaha_cv.pdf', import.meta.url));
+        if (!fs.existsSync(filePath)) {
+          filePath = fileURLToPath(new URL('./public/prashantchandra_resume.pdf', import.meta.url));
+        }
+        if (!fs.existsSync(filePath)) {
+          filePath = fileURLToPath(new URL('./public/prashant_resume.pdf', import.meta.url));
+        }
         if (fs.existsSync(filePath)) {
           const pdfBuffer = fs.readFileSync(filePath);
           const base64Data = pdfBuffer.toString('base64');

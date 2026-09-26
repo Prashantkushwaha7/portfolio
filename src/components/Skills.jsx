@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { skillCategories, destinationNode } from '../data/skills';
+import TechnicalEnvironment from './TechnicalEnvironment';
 
 const Skills = () => {
   const [activeTooltip, setActiveTooltip] = useState(null); // skill.id + index tag for uniqueness
@@ -162,6 +163,9 @@ const Skills = () => {
             </div>
           </div>
         </div>
+
+        {/* 3D TECHNICAL ENVIRONMENT WORKSTATION CENTERPIECE */}
+        <TechnicalEnvironment />
       </div>
     </section>
   );

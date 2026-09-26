@@ -3,10 +3,14 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 
 const badgeItems = [
-  { label: 'Java', pos: [-2.8, 2.2, 0.5], delay: 0, color: '#38bdf8' },
-  { label: 'React', pos: [2.9, 2.5, 0.4], delay: 1.5, color: '#60a5fa' },
-  { label: 'AI · IoT', pos: [-2.5, 0.4, 1.2], delay: 3.0, color: '#c084fc' },
-  { label: '</dev>', pos: [2.6, 0.5, 1.3], delay: 4.5, color: '#34d399' },
+  { label: 'Java', pos: [-3.3, 2.3, 0.2], delay: 0, color: '#38bdf8' },
+  { label: 'React', pos: [3.3, 2.4, 0.2], delay: 1.2, color: '#06b6d4' },
+  { label: 'Spring Boot', pos: [-3.4, 0.8, 0.6], delay: 2.4, color: '#84cc16' },
+  { label: 'Node.js', pos: [3.4, 0.9, 0.5], delay: 3.6, color: '#22c55e' },
+  { label: 'AI & Neural Nets', pos: [-2.4, 3.2, -0.2], delay: 1.8, color: '#a855f7' },
+  { label: 'IoT · ESP32', pos: [2.4, 3.3, -0.2], delay: 4.2, color: '#ec4899' },
+  { label: 'MongoDB · MySQL', pos: [-2.9, -0.5, 0.9], delay: 0.8, color: '#10b981' },
+  { label: 'Git / GitHub', pos: [2.9, -0.5, 0.9], delay: 2.8, color: '#818cf8' },
 ];
 
 const FloatingBadge = ({ label, pos, delay, color }) => {

@@ -1,98 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import DeveloperDesk from './3d/DeveloperDesk';
-import FloatingObjects from './3d/FloatingObjects';
-
-// Procedural 2.5D Workstation Visual Fallback Component
-const WorkstationFallbackVisual = () => (
-  <div className="workstation-procedural-visual">
-    <div className="desk-surface">
-      {/* Widescreen Monitor & Stand */}
-      <div className="visual-monitor">
-        <div className="monitor-bezel">
-          <div className="monitor-screen">
-            <div className="window-dots">
-              <span className="dot red"></span>
-              <span className="dot yellow"></span>
-              <span className="dot green"></span>
-              <span className="editor-tab">developer.js</span>
-            </div>
-            <pre className="code-content">
-              <code>
-                <span className="kw">const</span> <span className="var">developer</span> = &#123;{'\n'}
-                {'  '}<span className="prop">name</span>: <span className="str">"Prashant"</span>,{'\n'}
-                {'  '}<span className="prop">role</span>: <span className="str">"Full Stack Developer"</span>,{'\n'}
-                {'  '}<span className="prop">skills</span>: [<span className="val">"Java"</span>, <span className="val">"React"</span>, <span className="val">"AI"</span>, <span className="val">"IoT"</span>]{'\n'}
-                &#125;;{'\n\n'}
-                <span className="var">console</span>.<span className="fn">log</span>(<span className="str">"Welcome to Prashant's portfolio"</span>);
-              </code>
-            </pre>
-          </div>
-        </div>
-        <div className="monitor-stand"></div>
-      </div>
-
-      {/* Left Speaker */}
-      <div className="visual-speaker speaker-left">
-        <div className="speaker-driver woofer-cyan"></div>
-      </div>
-
-      {/* Right Speaker */}
-      <div className="visual-speaker speaker-right">
-        <div className="speaker-driver woofer-purple"></div>
-      </div>
-
-      {/* PC Tower with 2 RGB Fans */}
-      <div className="visual-pc-tower">
-        <div className="glass-panel">
-          <div className="fan-wrapper fan-cyan">
-            <div className="rotating-blades"></div>
-          </div>
-          <div className="fan-wrapper fan-purple">
-            <div className="rotating-blades"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Keyboard & Mouse */}
-      <div className="peripherals-row">
-        <div className="visual-keyboard">
-          <div className="rgb-strip"></div>
-        </div>
-        <div className="visual-mouse">
-          <div className="mouse-stripe"></div>
-        </div>
-      </div>
-
-      {/* Physical Desk Surface Highlight */}
-      <div className="desk-edge-glow"></div>
-    </div>
-  </div>
-);
-
-// WebGL Error Boundary
-class WebGLErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.warn('WebGL rendering error, switching to fallback:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <WorkstationFallbackVisual />;
-    }
-    return this.props.children;
-  }
-}
+import profileImg from '../assets/images/profile.png';
 
 // Character Split Arrays for Staggered Animation
 const word1 = "PRASHANT".split('');
@@ -100,170 +8,180 @@ const word2 = "CHANDRA".split('');
 const word3 = "KUSHWAHA".split('');
 
 const Hero = () => {
-  const [webglSupported, setWebglSupported] = useState(true);
-
-  useEffect(() => {
-    try {
-      const canvas = document.createElement('canvas');
-      const hasWebGL = !!(window.WebGLRenderingContext && 
-        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-      setWebglSupported(hasWebGL);
-    } catch (e) {
-      setWebglSupported(false);
-    }
-  }, []);
-
-  // Framer Motion Animation Variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] },
-    },
-  };
-
   return (
     <section className="hero-section" id="home">
+      {/* Background Decorative Ambient Glows */}
+      <div className="hero-ambient-glow hero-glow-left" aria-hidden="true"></div>
+      <div className="hero-ambient-glow hero-glow-right" aria-hidden="true"></div>
+
       <div className="hero-container">
-        {/* LEFT COLUMN — Intro Content & CTA */}
-        <motion.div
-          className="hero-content"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Availability Badge */}
-          <motion.div className="availability-badge" variants={itemVariants}>
-            <span className="cyan-pulse-dot"></span>
-            <span className="badge-text">AVAILABLE FOR OPPORTUNITIES</span>
-          </motion.div>
-
-          {/* Intro Subtitle */}
-          <motion.p className="hero-subtitle-intro" variants={itemVariants}>
-            HI, I'M
-          </motion.p>
-
-          {/* Main Name Typography — Character-by-Character Staggered Reveal (170ms per letter) */}
-          <h1 className="hero-main-title" aria-label="Prashant Chandra Kushwaha">
-            <div className="name-line-1">
-              {word1.map((char, i) => (
-                <motion.span
-                  key={`p-${i}`}
-                  className="name-char name-gradient"
-                  initial={{ opacity: 0, y: 20, filter: 'blur(5px)' }}
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  transition={{ duration: 0.55, delay: i * 0.17, ease: 'easeOut' }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </div>
-            <div className="name-line-2">
-              {word2.map((char, i) => (
-                <motion.span
-                  key={`c-${i}`}
-                  className="name-char name-white"
-                  initial={{ opacity: 0, y: 20, filter: 'blur(5px)' }}
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  transition={{ duration: 0.55, delay: (8 + i) * 0.17, ease: 'easeOut' }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-              <span className="char-space">&nbsp;</span>
-              {word3.map((char, i) => (
-                <motion.span
-                  key={`k-${i}`}
-                  className="name-char name-white"
-                  initial={{ opacity: 0, y: 20, filter: 'blur(5px)' }}
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  transition={{ duration: 0.55, delay: (8 + 7 + i) * 0.17, ease: 'easeOut' }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </div>
-          </h1>
-
-          {/* Job Title */}
-          <motion.p className="hero-job-title" variants={itemVariants}>
-            FULL STACK DEVELOPER
-          </motion.p>
-
-          {/* Short Professional Description */}
-          <motion.p className="hero-description" variants={itemVariants}>
-            I'm a Full Stack Developer focused on building immersive, high-performance web experiences with cutting-edge technologies.
-          </motion.p>
-
-          {/* CTA Buttons Group (Single Line on Desktop) */}
-          <motion.div className="hero-cta-group" variants={itemVariants}>
-            <motion.a
-              href="#projects"
-              className="btn-primary-cta"
-              whileHover={{ scale: 1.03, translateY: -2 }}
-              whileTap={{ scale: 0.98 }}
+        {/* TWO-COLUMN HERO COMPOSITION (Desktop: Left Text, Right Photo; Mobile: Centered Stack) */}
+        <div className="hero-upper-layout">
+          {/* LEFT CONTENT COLUMN (55-60% width on Desktop) */}
+          <div className="hero-text-block">
+            {/* 1. Availability Badge */}
+            <motion.div
+              className="availability-badge"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
             >
-              VIEW MY WORK <span className="btn-arrow">→</span>
-            </motion.a>
+              <span className="cyan-pulse-dot"></span>
+              <span className="badge-text">AVAILABLE FOR OPPORTUNITIES</span>
+            </motion.div>
 
-            <motion.a
-              href="#contact"
-              className="btn-secondary-cta"
-              whileHover={{ scale: 1.03, translateY: -2 }}
-              whileTap={{ scale: 0.98 }}
+            {/* 2. Intro Subtitle */}
+            <motion.p
+              className="hero-subtitle-intro"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.3, ease: 'easeOut' }}
             >
-              LET'S TALK <span className="btn-arrow">→</span>
-            </motion.a>
+              HI, I'M
+            </motion.p>
 
-            <motion.a
-              href="/resume"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-tertiary-cta"
-              whileHover={{ scale: 1.03, translateY: -2 }}
-              whileTap={{ scale: 0.98 }}
+            {/* 3. Main Name Typography with character reveal */}
+            <h1 className="hero-main-title" aria-label="Prashant Chandra Kushwaha">
+              <div className="name-line-1">
+                {word1.map((char, i) => (
+                  <motion.span
+                    key={`p-${i}`}
+                    className="name-char name-gradient"
+                    initial={{ opacity: 0, y: 18, filter: 'blur(5px)' }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    transition={{ duration: 0.45, delay: 0.4 + i * 0.04, ease: 'easeOut' }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </div>
+              <div className="name-line-2">
+                <span className="name-word">
+                  {word2.map((char, i) => (
+                    <motion.span
+                      key={`c-${i}`}
+                      className="name-char name-white"
+                      initial={{ opacity: 0, y: 18, filter: 'blur(5px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      transition={{ duration: 0.45, delay: 0.4 + (8 + i) * 0.035, ease: 'easeOut' }}
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
+                </span>
+                <span className="char-space">&nbsp;</span>
+                <span className="name-word">
+                  {word3.map((char, i) => (
+                    <motion.span
+                      key={`k-${i}`}
+                      className="name-char name-white"
+                      initial={{ opacity: 0, y: 18, filter: 'blur(5px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      transition={{ duration: 0.45, delay: 0.4 + (8 + 7 + i) * 0.035, ease: 'easeOut' }}
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
+                </span>
+              </div>
+            </h1>
+
+            {/* 4. Job Title */}
+            <motion.p
+              className="hero-job-title"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.85, ease: 'easeOut' }}
             >
-              VIEW RESUME <span className="btn-arrow">↗</span>
-            </motion.a>
-          </motion.div>
-        </motion.div>
+              FULL STACK DEVELOPER
+            </motion.p>
 
-        {/* RIGHT COLUMN — Large Developer Workstation Scene */}
-        <motion.div
-          className="hero-3d-wrapper"
-          initial={{ opacity: 0, scale: 0.92, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.0, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="workstation-glow-backdrop"></div>
-          
-          {webglSupported ? (
-            <WebGLErrorBoundary>
-              <Canvas
-                className="hero-3d-canvas"
-                camera={{ position: [0, 2.6, 9.2], fov: 44 }}
-                gl={{ antialias: true, alpha: true }}
+            {/* 5. Professional Description */}
+            <motion.p
+              className="hero-description"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.95, ease: 'easeOut' }}
+            >
+              I'm a Full Stack Developer focused on building immersive, high-performance web experiences with cutting-edge technologies.
+            </motion.p>
+
+            {/* 6. CTA Buttons Group */}
+            <motion.div
+              className="hero-cta-group"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.05, ease: 'easeOut' }}
+            >
+              <motion.a
+                href="#projects"
+                className="btn-primary-cta"
+                whileHover={{ scale: 1.03, translateY: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <DeveloperDesk />
-                <FloatingObjects />
-              </Canvas>
-            </WebGLErrorBoundary>
-          ) : (
-            <WorkstationFallbackVisual />
-          )}
-        </motion.div>
+                VIEW MY WORK <span className="btn-arrow">→</span>
+              </motion.a>
+
+              <motion.a
+                href="#contact"
+                className="btn-secondary-cta"
+                whileHover={{ scale: 1.03, translateY: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                LET'S TALK <span className="btn-arrow">→</span>
+              </motion.a>
+
+              <motion.a
+                href="/resume"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-tertiary-cta"
+                whileHover={{ scale: 1.03, translateY: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                VIEW RESUME <span className="btn-arrow">↗</span>
+              </motion.a>
+            </motion.div>
+          </div>
+
+          {/* RIGHT PROFILE PHOTO COLUMN (40-45% width on Desktop, Top on Mobile) */}
+          <motion.div
+            className="hero-avatar-block"
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="hero-avatar-wrapper">
+              {/* Cyan / Blue Outer Glow */}
+              <div className="hero-avatar-glow" aria-hidden="true"></div>
+
+              {/* Dotted Orbital Ring */}
+              <div className="hero-orbital-track" aria-hidden="true"></div>
+
+              {/* Glowing Orbital Arc */}
+              <div className="hero-orbital-arc" aria-hidden="true"></div>
+
+              {/* Secondary Thin Ring */}
+              <div className="hero-secondary-ring" aria-hidden="true"></div>
+
+              {/* Moving Orbiting Particles */}
+              <div className="hero-particles-track" aria-hidden="true">
+                <div className="orbital-particle particle-cyan"></div>
+                <div className="orbital-particle particle-purple"></div>
+              </div>
+
+              {/* Main Circular Avatar Ring with Purple/Blue Gradient */}
+              <div className="hero-avatar-ring">
+                <img
+                  src={profileImg}
+                  alt="Prashant Chandra Kushwaha"
+                  className="hero-avatar-img"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* BOTTOM SCROLL INDICATOR */}
@@ -271,7 +189,7 @@ const Hero = () => {
         className="hero-scroll-indicator"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
+        transition={{ delay: 1.4, duration: 0.5 }}
       >
         <a href="#about" className="scroll-link">
           <span className="scroll-text">SCROLL TO EXPLORE</span>

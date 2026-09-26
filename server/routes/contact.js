@@ -37,7 +37,13 @@ router.get('/health', (req, res) => {
 // GET /api/resume-data endpoint (Returns base64 encoded PDF string to bypass IDM extension interception)
 router.get('/resume-data', (req, res) => {
   try {
-    const filePath = path.join(__dirname, '../../public/prashant_resume.pdf');
+    let filePath = path.join(__dirname, '../../public/Prashant chandra kushwaha_cv.pdf');
+    if (!fs.existsSync(filePath)) {
+      filePath = path.join(__dirname, '../../public/prashantchandra_resume.pdf');
+    }
+    if (!fs.existsSync(filePath)) {
+      filePath = path.join(__dirname, '../../public/prashant_resume.pdf');
+    }
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ success: false, message: 'Resume PDF file not found.' });
     }
