@@ -35,21 +35,29 @@ const ResumeViewer = () => {
       console.log('Fetching PDF data via JSON API endpoint:', apiEndpoint);
 
       try {
-        const res = await fetch(apiEndpoint);
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status} ${res.statusText} - Failed to fetch resume data`);
+        let uint8Array = null;
+
+        try {
+          const res = await fetch(apiEndpoint);
+          if (res.ok) {
+            const json = await res.json();
+            if (json.success && json.data) {
+              uint8Array = base64ToUint8Array(json.data);
+            }
+          }
+        } catch (apiErr) {
+          console.warn('API resume-data fetch failed, falling back to static binary fetch:', apiErr);
         }
 
-        const json = await res.json();
-        if (!json.success || !json.data) {
-          throw new Error(json.message || 'Invalid resume data response from server.');
+        // Fallback: fetch static PDF directly if API response was unavailable
+        if (!uint8Array) {
+          const staticRes = await fetch('/prashantchandra_resume.pdf');
+          if (!staticRes.ok) {
+            throw new Error(`HTTP ${staticRes.status} ${staticRes.statusText} - Failed to fetch resume PDF`);
+          }
+          const buffer = await staticRes.arrayBuffer();
+          uint8Array = new Uint8Array(buffer);
         }
-
-        console.log('JSON API payload received successfully. Base64 length:', json.data.length);
-
-        // Convert base64 to Uint8Array
-        const uint8Array = base64ToUint8Array(json.data);
-        console.log('Converted to Uint8Array. Size in bytes:', uint8Array.byteLength);
 
         // Pass binary data directly to PDF.js
         const loadingTask = pdfjsLib.getDocument({ data: uint8Array });

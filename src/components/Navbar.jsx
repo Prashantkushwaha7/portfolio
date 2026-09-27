@@ -54,9 +54,32 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (name) => {
-    setActiveSection(name);
+  const handleNavClick = (e, item) => {
+    if (e) {
+      e.preventDefault();
+    }
+    setActiveSection(item.name);
     setMobileMenuOpen(false);
+
+    const targetId = item.href.replace('#', '');
+    const element = document.getElementById(targetId);
+    if (element) {
+      const navHeader = document.querySelector('.navbar-header');
+      const navHeight = navHeader ? navHeader.getBoundingClientRect().height : 70;
+      const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+      const scrollTarget = Math.max(0, elementTop - navHeight);
+
+      window.scrollTo({
+        top: scrollTarget,
+        behavior: 'smooth',
+      });
+
+      if (window.history.pushState) {
+        window.history.pushState(null, '', item.href);
+      } else {
+        window.location.hash = item.href;
+      }
+    }
   };
 
   return (
@@ -68,7 +91,11 @@ const Navbar = () => {
     >
       <div className="navbar-container">
         {/* Brand Logo */}
-        <a href="#home" className="nav-brand" onClick={() => handleNavClick('Home')}>
+        <a
+          href="#home"
+          className="nav-brand"
+          onClick={(e) => handleNavClick(e, { name: 'Home', href: '#home' })}
+        >
           PRASHANT
         </a>
 
@@ -82,7 +109,7 @@ const Navbar = () => {
                 <a
                   href={item.href}
                   className={`nav-link ${isActive ? 'active' : ''}`}
-                  onClick={() => handleNavClick(item.name)}
+                  onClick={(e) => handleNavClick(e, item)}
                 >
                   {item.name}
                   {isActive && (
@@ -101,7 +128,8 @@ const Navbar = () => {
         {/* Mobile Hamburger Menu Toggle */}
         <button
           className="mobile-toggle-btn"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          type="button"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -126,7 +154,7 @@ const Navbar = () => {
                   key={item.name}
                   href={item.href}
                   className={`mobile-nav-link ${isActive ? 'active' : ''}`}
-                  onClick={() => handleNavClick(item.name)}
+                  onClick={(e) => handleNavClick(e, item)}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05, duration: 0.2 }}
